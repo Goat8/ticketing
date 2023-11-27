@@ -1,0 +1,20 @@
+apiVersion: skaffold/v4beta8
+kind: Config
+metadata:
+  name: ticketing
+build:
+  # local:
+  #   push: false
+  artifacts:
+    - image: maria12/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync: # this sync any change in file in below src path to pod
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+manifests:
+  rawYaml:
+    - infra/k8s/auth-depl.yaml
+    - infra/k8s/ingress-srv.yaml

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector: # step 1. Instruct pod 
+    matchLabels:
+      app: auth
+  template: # get config to create path
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers: # designate container that is going to be running the pod
+        - name: auth
+          image: maria12/auth
+---
+apiVersion: v1 #service to allow  communicate with pod
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth #pod name; that i defined above
+  type: ClusterIP
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

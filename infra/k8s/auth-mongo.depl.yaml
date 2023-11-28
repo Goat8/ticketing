@@ -1,37 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: auth-mongo-depl
 spec:
   replicas: 1
   selector: # step 1. Instruct pod 
     matchLabels:
-      app: auth
+      app: auth-mongo
   template: # get config to create path
     metadata:
       labels:
-        app: auth
+        app: auth-mongo
     spec:
       containers: # designate container that is going to be running the pod
-        - name: auth
-          image: maria12/auth
-          env:
-            - name: JWT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY
----   
+        - name: auth-mongo
+          image: mongo
+---
 apiVersion: v1 #service to allow  communicate with pod
 kind: Service
 metadata:
-  name: auth-service
+  name: auth-mongo-srv
 spec:
   selector:
-    app: auth #pod name; that i defined above
+    app:  auth-mongo #pod name; that i defined above
   type: ClusterIP
   ports:
-    - name: auth
+    - name: auth-mongo #can be any name
       protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 27017
+      targetPort: 27017

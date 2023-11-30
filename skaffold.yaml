@@ -5,7 +5,7 @@ metadata:
 build:
   # local:
   #   push: false
-  artifacts:
+  artifacts: #setup code syncing
     - image: maria12/auth
       context: auth
       docker:
@@ -14,8 +14,17 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: maria12/next-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync: # this sync any change in file in below src path to pod
+        manual:
+          - src: '**/*.ts'
+            dest: .
 manifests:
   rawYaml:
     - infra/k8s/auth-depl.yaml
     - infra/k8s/ingress-srv.yaml
     - infra/k8s/auth-mongo.depl.yaml
+    - infra/k8s/next-client-depl.yaml

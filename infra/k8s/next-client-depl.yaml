@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: next-client-depl
+spec:
+  replicas: 1
+  selector: # step 1. Instruct pod 
+    matchLabels:
+      app: next-client
+  template: # get config to create path
+    metadata:
+      labels:
+        app: next-client
+    spec:
+      containers: # designate container that is going to be running the pod
+        - name: next-client
+          image: maria12/next-client
+---   
+apiVersion: v1 #service to allow  communicate with pod
+kind: Service
+metadata:
+  name: next-client-service
+spec:
+  selector:
+    app: next-client #pod name; that i defined above
+  type: ClusterIP
+  ports:
+    - name: next-client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

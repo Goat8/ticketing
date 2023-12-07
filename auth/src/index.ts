@@ -16,6 +16,8 @@ const start = async ()=>{
     catch(err) {
         console.log("EORRRRRRRRRR", err)
     }
+    console.log("Starting....")
+
     app.listen(3000, async ()=>{
         console.log("Auth service listening on port 3000!!!");
     });

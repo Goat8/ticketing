@@ -1,7 +1,5 @@
 import express, {Request, Response} from "express";
-import {body} from "express-validator"
-import { BadRequestError,NotFoundError,currentUser,requrieAuth,validateRequest } from "@mariarafique/common";
-import jwt from "jsonwebtoken";
+import { BadRequestError,NotFoundError,currentUser,requrieAuth } from "@mariarafique/common";
 import { Ticket } from "../models/ticket";
 const router = express.Router()
 

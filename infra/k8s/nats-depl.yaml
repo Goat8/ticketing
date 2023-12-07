@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  replicas: 1
+  selector: # step 1. Instruct pod 
+    matchLabels:
+      app: nats
+  template: # get config to create path
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers: # designate container that is going to be running the pod
+        - name: nats
+          image: nats-streaming
+          args: [
+            '-p',
+            '4222',
+            '-m',
+            '8222',
+            '-hbi',
+            '5s',
+            '-hbt',
+            '-hbf',
+            '2',
+            '-SD',
+            '-cid',
+            'ticketing'
+          ]
+---         
+apiVersion: v1 #service to allow  communicate with pod
+kind: Service
+metadata:
+  name: nats-service
+spec:
+  selector:
+    app: nats #pod name; that i defined above
+  type: ClusterIP
+  ports:
+    - name: client
+      protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - name: monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: 8222

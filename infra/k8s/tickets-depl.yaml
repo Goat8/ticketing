@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   replicas: 1
   selector: # step 1. Instruct pod 
     matchLabels:
-      app: auth
+      app: tickets
   template: # get config to create path
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers: # designate container that is going to be running the pod
-        - name: auth
-          image: maria12/auth
+        - name: tickets
+          image: maria12/tickets
           env:
             - name: JWT_KEY
               valueFrom:
@@ -22,18 +22,18 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
             - name: MONGO_URI
-              value: mongodb://auth-mongo-srv:27017/auth
----         
+              value: mongodb://tickets-mongo-srv:27017/tickets
+---   
 apiVersion: v1 #service to allow  communicate with pod
 kind: Service
 metadata:
-  name: auth-service
+  name: tickets-service
 spec:
   selector:
-    app: auth #pod name; that i defined above
+    app: tickets #pod name; that i defined above
   type: ClusterIP
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000

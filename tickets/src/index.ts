@@ -9,16 +9,17 @@ const start = async ()=>{
     if(!process.env.MONGO_URI){
         throw new Error("Mongo URI must be defined");
     }
-    try{
-        await mongoose.connect(process.env.MONGO_URI) //mongodb://auth-mongo-srv:27017/auth
+    try{ 
+        await mongoose.connect(process.env.MONGO_URI) //update
         console.log("Connected to database successfuly.")
+        app.listen(3000, async ()=>{
+            console.log("ticket service listening on port 3000!!!");
+        });
     }
     catch(err) {
         console.log("EORRRRRRRRRR", err)
     }
-    app.listen(3000, async ()=>{
-        console.log("Auth service listening on port 3000!!!");
-    });
+   
 }
 
 start()

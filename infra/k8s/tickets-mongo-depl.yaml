@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-mongo-depl
+spec:
+  replicas: 1
+  selector: # step 1. Instruct pod 
+    matchLabels:
+      app: tickets-mongo
+  template: # get config to create path
+    metadata:
+      labels:
+        app: tickets-mongo
+    spec:
+      containers: # designate container that is going to be running the pod
+        - name: tickets-mongo
+          image: mongo
+---
+apiVersion: v1 #service to allow  communicate with pod
+kind: Service
+metadata:
+  name: tickets-mongo-srv
+spec:
+  selector:
+    app:  tickets-mongo #pod name; that i defined above
+  type: ClusterIP
+  ports:
+    - name: tickets-mongo #can be any name
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
